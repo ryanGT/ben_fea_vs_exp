@@ -89,7 +89,7 @@ m1 = abs(s1+p_act1)
 num = K_act*m1
 
 #dict2['f_gain'] = 1.0/(h**2)
-dict2['f_gain'] = 0.12
+dict2['f_gain'] = h
 J_motor = 1.0/(num)
 dict2['J_motor'] = J_motor
 c_motor = p_act1*J_motor

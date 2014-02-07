@@ -93,7 +93,7 @@ mu = beam_params['mu']
 L = beam_params['L']
 EI = beam_params['EI']
 
-n_e = 3#number of elements
+n_e = 4#number of elements
 
 h = float(L)/n_e
 
