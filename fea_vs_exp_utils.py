@@ -41,7 +41,7 @@ f_exp = expfile.freq
 bode0 = expfile.calc_bode('v','theta')
 bode1 = expfile.calc_bode('v','a')
 
-freqs = [0.7, 1.75, 3.25, 5.0, 15.0, 22.0, 40.0]
+freqs = [0.7, 1.75, 3.25, 5.0, 15.0, 22.0, 30.0]
 Ns = [15.0, 40.0, 15.0, 10.0, 70.0, 10.0]
 
 ds_inds0, f_ds0, bode0_ds = bode0.log_downsample(f_exp, freqs, Ns)
@@ -181,9 +181,19 @@ def FEA_ss_model(J_motor=0.010, J_bm=0.0100, \
     B_bm = row_stack([zeros((nr_bm,1)), dot(Mi_bm,F_bm)])
     y_row = zeros((1,nr_bm))
 
-    y_row[0,1] = 1.0/h*180.0/pi
+    counts_out = True
+    y_theta = 1.0/h*180.0/pi
+    if counts_out:
+        y_theta *= 1024.0/360
+    y_row[0,1] = y_theta
+
     C_bm_1 = column_stack([y_row, zeros((1,nr_bm))])
-    C_bm_2 = A_bm[-2,:]
+
+    C_bm_2 = copy.copy(A_bm[-2,:])
+    a_gain = 1.1452654922936827
+    use_a_gain = 1
+    if use_a_gain:
+        C_bm_2 *= a_gain
     C_bm_ss = row_stack([C_bm_1, C_bm_2])
     D_bm = zeros((2,1))
     D_bm[-1] = B_bm[-2]
