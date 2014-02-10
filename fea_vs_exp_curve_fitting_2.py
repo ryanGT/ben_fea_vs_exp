@@ -8,7 +8,7 @@ reload(utils)
 
 import pylab_util as PU
 
-import rwkmisc
+import rwkmisc, txt_data_processing, control
 import copy
 
 ig_dict = utils.build_params_dict()
@@ -99,5 +99,30 @@ utils.plot_from_dict(dict2, fmt='m-', label='TMM params')
 
 PU.SetLegend(1, loc=2)
 PU.SetLegend(2, loc=2)
+
+
+# Time domain check
+sys = utils.get_sys_from_params(dict2.values(), dict2.keys())
+
+
+td_file = txt_data_processing.Data_File('OL_pulse_test_sys_check_SLFR_RTP_OL_Test_uend=0.txt')
+t = td_file.t
+u = td_file.u
+
+do_time_domain_plot = 1
+
+if do_time_domain_plot:
+    td_file.Time_Plot(labels=['u','theta','a'], fignum=3)
+
+    y, to, xo = control.lsim(sys, u, t)
+
+    figure(3)
+    plot(t, y[:,0], label='model $\\theta$')
+    plot(t, y[:,1], label='model $\\ddot{x}_{tip}$')
+
+    figure(3)
+    legend(loc=8)
+
+
 
 show()
